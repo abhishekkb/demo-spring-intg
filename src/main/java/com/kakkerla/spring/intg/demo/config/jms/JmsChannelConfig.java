@@ -1,5 +1,6 @@
 package com.kakkerla.spring.intg.demo.config.jms;
 
+import com.kakkerla.spring.intg.demo.repo.PaymentRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,7 +71,7 @@ public class JmsChannelConfig {
 
     @Bean
     @ServiceActivator(inputChannel = "channel2")
-    public CountDownLatchHandler countDownLatchHandler() {
-        return new CountDownLatchHandler();
+    public PaymentMessageHandler paymentMessageHandler(PaymentRepository paymentRepository) {
+        return new PaymentMessageHandler(paymentRepository);
     }
 }

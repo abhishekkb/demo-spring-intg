@@ -1,11 +1,13 @@
 package com.kakkerla.spring.intg.demo.config.jms;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import com.kakkerla.spring.intg.demo.DemoSpringIntgApplication;
+import com.kakkerla.spring.intg.demo.entity.Payment;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -35,7 +37,7 @@ public class JmsChannelConfigTest {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private CountDownLatchHandler countDownLatchHandler;
+    private PaymentMessageHandler paymentMessageHandler;
 
     @Test
     public void testIntegration() throws Exception {
@@ -47,15 +49,22 @@ public class JmsChannelConfigTest {
 
         LOGGER.info("sending 10 messages");
         for (int i = 0; i < 10; i++) {
-            GenericMessage<String> message = new GenericMessage<>(
-                    "Hello Spring Integration JMS " + i + "!", headers);
+            GenericMessage<Payment> message = new GenericMessage<>(createPayload(i));
             channel1.send(message);
             LOGGER.info("sent message='{}'", message);
         }
 
-        countDownLatchHandler.getLatch().await(10000,
+        paymentMessageHandler.getLatch().await(10000,
                 TimeUnit.MILLISECONDS);
-        assertThat(countDownLatchHandler.getLatch().getCount())
+        assertThat(paymentMessageHandler.getLatch().getCount())
                 .isEqualTo(0);
+    }
+
+    private Payment createPayload(int i) {
+        Payment p = new Payment();
+        p.setAmount("" + (1000 + i));
+        p.setType("type" + i);
+        return p;
+
     }
 }
