@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.kakkerla.spring.intg.demo.DemoSpringIntgApplication;
 import com.kakkerla.spring.intg.demo.entity.Payment;
+import com.kakkerla.spring.intg.demo.handler.PaymentChannelMessageHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class JmsChannelConfigTest {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private PaymentMessageHandler paymentMessageHandler;
+    private PaymentChannelMessageHandler paymentChannelMessageHandler;
 
     @Test
     public void testIntegration() throws Exception {
@@ -54,9 +55,9 @@ public class JmsChannelConfigTest {
             LOGGER.info("sent message='{}'", message);
         }
 
-        paymentMessageHandler.getLatch().await(10000,
+        paymentChannelMessageHandler.getLatch().await(10000,
                 TimeUnit.MILLISECONDS);
-        assertThat(paymentMessageHandler.getLatch().getCount())
+        assertThat(paymentChannelMessageHandler.getLatch().getCount())
                 .isEqualTo(0);
     }
 

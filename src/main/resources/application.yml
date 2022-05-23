@@ -52,3 +52,6 @@ spring:
 
 destination:
   integration: integration.q
+  payment:
+    request: "preq.q"
+    response: "presp.q"

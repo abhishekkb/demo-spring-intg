@@ -1,4 +1,4 @@
-package com.kakkerla.spring.intg.demo.config.jms;
+package com.kakkerla.spring.intg.demo.handler;
 
 import com.kakkerla.spring.intg.demo.entity.Payment;
 import com.kakkerla.spring.intg.demo.repo.PaymentRepository;
@@ -11,7 +11,7 @@ import org.springframework.messaging.MessageHandler;
 import java.util.concurrent.CountDownLatch;
 
 @Slf4j
-public class PaymentMessageHandler implements MessageHandler {
+public class PaymentChannelMessageHandler implements MessageHandler {
 
     private CountDownLatch latch = new CountDownLatch(10);
 
@@ -22,7 +22,7 @@ public class PaymentMessageHandler implements MessageHandler {
     private final PaymentRepository paymentRepository;
 
     @Autowired
-    public PaymentMessageHandler(PaymentRepository paymentRepository){
+    public PaymentChannelMessageHandler(PaymentRepository paymentRepository){
         this.paymentRepository = paymentRepository;
     }
 
